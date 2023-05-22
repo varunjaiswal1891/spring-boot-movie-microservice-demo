@@ -22,3 +22,10 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+.vscode/settings.json
+.DS_Store
+movie-catalog-service/.mvn/wrapper/maven-wrapper.properties
+.gitignore
+.gitignore
+movie-info-service/.mvn/wrapper/maven-wrapper.properties
+ratings-data-service/.mvn/wrapper/maven-wrapper.properties
