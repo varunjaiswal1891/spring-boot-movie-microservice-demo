@@ -25,8 +25,8 @@ public class MovieCatalogResource {
     {
         //get all rated movies first
         List<Rating> ratingList =  Arrays.asList(
-            new Rating("1234", 3),
-            new Rating("5678", 5)
+            new Rating("12345", 3),
+            new Rating("6789", 5)
         );
         //for each movieID call movie Info Service and get details
         //put them all together
