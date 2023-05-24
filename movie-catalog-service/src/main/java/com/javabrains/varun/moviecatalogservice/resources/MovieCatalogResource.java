@@ -29,12 +29,14 @@ public class MovieCatalogResource {
     public List<CatalogItem> getCatalog(@PathVariable("userId") String userId)
     {
         //get all user rated movies first
-        UserRating ratingList =  restTemplate.getForObject("http://localhost:8083/ratingsdata/users/"+userId, UserRating.class);
+        //UserRating ratingList =  restTemplate.getForObject("http://localhost:8083/ratingsdata/users/"+userId, UserRating.class);
+        UserRating ratingList =  restTemplate.getForObject("http://ratings-data-service/ratingsdata/users/"+userId, UserRating.class);
 
         return ratingList.getUserRating().stream().map( r1 -> {   
         //Use of RestTemplate which is going to be deprecated in future - using WebClient in future
         //for each movieID call movie Info Service and get details
-        Movie movie = restTemplate.getForObject("http://localhost:8082/movies/"+r1.getMovieId(), Movie.class);
+        //Movie movie = restTemplate.getForObject("http://localhost:8082/movies/"+r1.getMovieId(), Movie.class);
+        Movie movie = restTemplate.getForObject("http://movie-info-service/movies/"+r1.getMovieId(), Movie.class);
         //put them all together
         return new CatalogItem(movie.getMovieName(),"test desccription11",r1.getRating());
         })
