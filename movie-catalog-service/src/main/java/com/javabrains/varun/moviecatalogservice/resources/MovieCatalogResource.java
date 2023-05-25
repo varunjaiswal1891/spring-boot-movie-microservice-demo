@@ -38,7 +38,7 @@ public class MovieCatalogResource {
         //Movie movie = restTemplate.getForObject("http://localhost:8082/movies/"+r1.getMovieId(), Movie.class);
         Movie movie = restTemplate.getForObject("http://movie-info-service/movies/"+r1.getMovieId(), Movie.class);
         //put them all together
-        return new CatalogItem(movie.getMovieName(),"test desccription11",r1.getRating());
+        return new CatalogItem(movie.getTitle(),movie.getOverview(),r1.getRating());
         })
         .collect(Collectors.toList());
 

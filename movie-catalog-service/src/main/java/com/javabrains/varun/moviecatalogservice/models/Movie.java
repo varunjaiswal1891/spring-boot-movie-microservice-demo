@@ -2,27 +2,43 @@ package com.javabrains.varun.moviecatalogservice.models;
 
 public class Movie {
     
-    private String movieId;
-    private String movieName;
+    private String id;
+    private String title;
+    private String overview;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public Movie(String id, String title, String overview) {
+        this.id = id;
+        this.title = title;
+        this.overview = overview;
+    }
 
     public Movie() {
     }
 
-    public Movie(String movieId, String movieName) {
-        this.movieId = movieId;
-        this.movieName = movieName;
-    }
     
-    public String getMovieId() {
-        return movieId;
-    }
-    public void setMovieId(String movieId) {
-        this.movieId = movieId;
-    }
-    public String getMovieName() {
-        return movieName;
-    }
-    public void setMovieName(String movieName) {
-        this.movieName = movieName;
-    }
+
 }

@@ -25,8 +25,8 @@ public class RatingResource {
     {
          //get all rated movies first
         List<Rating> ratingList =  Arrays.asList(
-                                        new Rating("1234", 3),
-                                        new Rating("5678", 5)
+                                        new Rating("100", 3),
+                                        new Rating("200", 5)
                                     );
         UserRating userRating = new UserRating();
         userRating.setUserRating(ratingList);
