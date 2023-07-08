@@ -11,6 +11,7 @@ import com.javabrains.varun.moviecatalogservice.models.CatalogItem;
 import com.javabrains.varun.moviecatalogservice.models.Movie;
 import com.javabrains.varun.moviecatalogservice.models.Rating;
 import com.javabrains.varun.moviecatalogservice.models.UserRating;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class MovieCatalogResource {
     private WebClient.Builder webClientBuilder;
 
     @RequestMapping("/{userId}")
+    @HystrixCommand(fallbackMethod = "getFallbackCatalog")
     public List<CatalogItem> getCatalog(@PathVariable("userId") String userId)
     {
         //get all user rated movies first
@@ -42,6 +44,11 @@ public class MovieCatalogResource {
         })
         .collect(Collectors.toList());
 
+    }
+
+    public List<CatalogItem> getFallbackCatalog(@PathVariable("userId") String userId)
+    {
+        return Arrays.asList(new CatalogItem("No Movie", "", 0));
     }
 }
 
