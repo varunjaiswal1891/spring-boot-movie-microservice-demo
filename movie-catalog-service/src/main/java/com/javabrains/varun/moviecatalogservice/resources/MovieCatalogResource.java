@@ -11,6 +11,8 @@ import com.javabrains.varun.moviecatalogservice.models.CatalogItem;
 import com.javabrains.varun.moviecatalogservice.models.Movie;
 import com.javabrains.varun.moviecatalogservice.models.Rating;
 import com.javabrains.varun.moviecatalogservice.models.UserRating;
+import com.javabrains.varun.moviecatalogservice.services.MovieInfo;
+import com.javabrains.varun.moviecatalogservice.services.UserRatingInfo;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 import java.util.*;
@@ -26,30 +28,33 @@ public class MovieCatalogResource {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
+    @Autowired
+    MovieInfo movieInfo;
+
+    @Autowired
+    UserRatingInfo userRatingInfo;
+
     @RequestMapping("/{userId}")
-    @HystrixCommand(fallbackMethod = "getFallbackCatalog")
     public List<CatalogItem> getCatalog(@PathVariable("userId") String userId)
     {
-        //get all user rated movies first
-        //UserRating ratingList =  restTemplate.getForObject("http://localhost:8083/ratingsdata/users/"+userId, UserRating.class);
-        UserRating ratingList =  restTemplate.getForObject("http://ratings-data-service/ratingsdata/users/"+userId, UserRating.class);
-
-        return ratingList.getUserRating().stream().map( r1 -> {   
-        //Use of RestTemplate which is going to be deprecated in future - using WebClient in future
-        //for each movieID call movie Info Service and get details
-        //Movie movie = restTemplate.getForObject("http://localhost:8082/movies/"+r1.getMovieId(), Movie.class);
-        Movie movie = restTemplate.getForObject("http://movie-info-service/movies/"+r1.getMovieId(), Movie.class);
-        //put them all together
-        return new CatalogItem(movie.getTitle(),movie.getOverview(),r1.getRating());
-        })
-        .collect(Collectors.toList());
-
+        
+        UserRating ratingList = userRatingInfo.getUserRating(userId);
+        return ratingList.getUserRating()
+                         .stream()
+                         .map( r1 -> movieInfo.getCatalogItem(r1))
+                         .collect(Collectors.toList());
     }
 
     public List<CatalogItem> getFallbackCatalog(@PathVariable("userId") String userId)
     {
         return Arrays.asList(new CatalogItem("No Movie", "", 0));
     }
+
+   
+
+    
+
+    
 }
 
 //Use of WebClient to call any RestAPI   -- use of Async programming 
