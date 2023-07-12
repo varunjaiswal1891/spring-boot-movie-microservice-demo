@@ -8,6 +8,7 @@ import com.javabrains.varun.moviecatalogservice.models.CatalogItem;
 import com.javabrains.varun.moviecatalogservice.models.Movie;
 import com.javabrains.varun.moviecatalogservice.models.Rating;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 @Service
 public class MovieInfo {
@@ -15,7 +16,13 @@ public class MovieInfo {
     @Autowired
     private RestTemplate restTemplate;
     
-    @HystrixCommand(fallbackMethod = "getFallbackCatalogItem")
+    //setting bulkhead pattern - ship sink compartments concept
+    @HystrixCommand(fallbackMethod = "getFallbackCatalogItem",
+                    threadPoolKey = "movieInfoPool",
+                    threadPoolProperties = {
+                        @HystrixProperty(name = "coreSize",value = "20"),
+                        @HystrixProperty(name = "maxQueueSize",value = "10")
+                    })
     public CatalogItem getCatalogItem(Rating r1)
     {
         //Use of RestTemplate which is going to be deprecated in future - using WebClient in future
